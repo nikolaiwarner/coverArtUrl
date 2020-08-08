@@ -1,6 +1,6 @@
 {
   "name": "coverarturl",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "fetch a url for album cover art",
   "main": "index.js",
   "bin": "cli.js",
