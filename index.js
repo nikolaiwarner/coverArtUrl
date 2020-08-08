@@ -1,31 +1,30 @@
-const musicbrainz = require('musicbrainz')
 const fetch = require('node-fetch')
 
 function coverArtUrl({ artist, release }) {
-  return new Promise((resolve, reject) => {
-    musicbrainz.searchReleases(release, { artist }, async function (err, releases) {
-      if (err) reject(err)
-      if (releases.length) {
-        const response = await fetch(
-          `https://coverartarchive.org/release/${releases[0].id}`,
-        )
-        if (response.ok) {
-          const coverArt = await response.json()
-          if (coverArt.images && coverArt.images.length) {
-            resolve(coverArt.images[0].image)
-          } else {
-            // No cover art for this release
-            resolve()
-          }
+  return fetch(
+    `https://musicbrainz.org/ws/2/release?fmt=json&limit=1&query=artist:${artist} AND release:${release}`,
+  ).then(async (mbResponse) => {
+    const mbData = await mbResponse.json()
+    if (mbData && mbData.releases && mbData.releases.length) {
+      const caResponse = await fetch(
+        `https://coverartarchive.org/release/${mbData.releases[0].id}`,
+      )
+      if (caResponse.ok) {
+        const coverArt = await caResponse.json()
+        if (coverArt.images && coverArt.images.length) {
+          return coverArt.images[0].image
         } else {
           // No cover art for this release
-          resolve()
+          return
         }
       } else {
-        // No release found
-        resolve()
+        // No cover art for this release
+        return
       }
-    })
+    } else {
+      // No release found
+      return
+    }
   })
 }
 
