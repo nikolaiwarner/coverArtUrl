@@ -14,8 +14,8 @@ const url = await coverArtUrl({ artist: 'Talk Talk', release: 'Spirit of Eden' }
 
 Also this can be used from the command line.
 
-`$ npm i -g coverArtUrl`
+`$ npm i -g coverarturl`
 
-`$ coverArtUrl "artist name" "album name"`
+`$ coverarturl "artist name" "album name"`
 
 Thanks to musicbrainz and coverartarchive.org!
